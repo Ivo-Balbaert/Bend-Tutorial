@@ -140,8 +140,7 @@ Create a mixed-language Hello World program ('World' is in Japanese here) called
 import Base
 
 def main() -> IO(Unit):
-  do IO<Unit>:  # start of effect-block
-    IO.print("Hello, 世界 from Bend!") # => Hello, 世界 from Bend!
+  IO.print("Hello, 世界 from Bend!") # => Hello, 世界 from Bend!
 ```
 
 Run it just like you'd run a Python script:
@@ -153,7 +152,7 @@ bend hello.bend
 You'll see:
 
 ```
-Hello, World from Bend!
+Hello, 世界 from Bend!
 ```
 
 Notice the indentation (two spaces). This is mostly by convention to indicate and separate code blocks, 
@@ -165,7 +164,6 @@ Let's unpack this, piece by piece, because almost every part of it has a Python 
 |----------------------------------|------------------------------|----------------------------------------------------------------------|
 | `import Base`                    | `import` (implicit builtins) | Loads Bend's standard library. Every Bend file starts with this.     |
 | `def main() -> IO(Unit):`        | `def main():`                | Defines a function named `main`. for `-> IO(Unit)`, see below.       |
-| `do IO<Unit>:`                   | (no equivalent)              | Opens an "effect block": a sequence of real-world actions.           |
 | `IO.print(...)`                  | `print(...)`                 | Prints a string.                                                     |
 | `#`                              | `#`                          | Starts a comment (in a) code line.                                   |
 
@@ -179,7 +177,53 @@ To change the world, a function must *say so* in its return type (`->`), by retu
 Think of `IO(Unit)` as a function's way of declaring: *I perform effects (here printing) and return nothing interesting (`Unit`)*.
 This is one of Bend's core differences from Python: side effects are visible in the type, not hidden inside the function body.
 
-Remark: if there is only one IO call, the `do IO<Unit>` can be left out.
+Now try to print two messages after one another, so we have two effects:
+
+```py
+# hello_broken.bend:
+import Base
+
+def main() -> IO(Unit):
+  IO.print("Hello, 世界 from Bend!") 
+  IO.print("Hello, World from Bend!") 
+```
+
+Running this code with $ bend hello_broken.bend confronts you with your first Bend error:
+SOME PROOFS FAIL
+Error:
+- expected : 'def', 'type' or 'law'
+- observed : 'I'
+Location:
+4 |   IO.print("Hello, 世界 from Bend!")
+5>|   IO.print("Hello, World from Bend!")
+  |   ^
+6 |
+
+The error message isn't terribly clear I'm afraid, it just tells you something is wrong starting at line 5.
+But at least you now get acquainted with the general format of a Bend error:
+- Compare observed : 'I' with what the compiler expects: expected : 'def', 'type' or 'law'
+- you see the Location where the error occurred (start line 5)
+
+What is wrong here? 
+It turns out that if there is more than one IO call or IO effect, we need to add a `do IO<Unit>` at the start of the effect-block, as in:
+
+```py
+# hello_do.bend:
+import Base
+
+def main() -> IO(Unit):
+  do IO<Unit>:  # start of effect-block
+    IO.print("Hello, 世界 from Bend!") # => Hello, 世界 from Bend!
+    IO.print("Hello, World from Bend!") # => Hello, 世界 from Bend!
+```
+# =>
+# Hello, 世界 from Bend!
+# Hello, World from Bend!
+
+`do IO<Unit>:` opens an "effect block", which is a sequence of real-world actions. There is no Python equivalent for this annotation.
+
+Remark: In a real program you'll most probably have more than one IO effect called in main(). So get used to adding a `do IO<Unit>:` line
+in `main()`, it works also if there is only one effect!  
 
 **Python difference #1:** Bend is *pure*. A function can't secretly print or read files. Anything that touches the outside world must say so in its type, with `IO`.
 
