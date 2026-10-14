@@ -189,6 +189,8 @@ def main() -> IO(Unit):
 ```
 
 Running this code with $ bend hello_broken.bend confronts you with your first Bend error:
+
+```
 SOME PROOFS FAIL
 Error:
 - expected : 'def', 'type' or 'law'
@@ -198,6 +200,7 @@ Location:
 5>|   IO.print("Hello, World from Bend!")
   |   ^
 6 |
+```
 
 The error message isn't terribly clear I'm afraid, it just tells you something is wrong starting at line 5.
 But at least you now get acquainted with the general format of a Bend error:
