@@ -214,11 +214,8 @@ import Base
 def main() -> IO(Unit):
   do IO<Unit>:  # start of effect-block
     IO.print("Hello, 世界 from Bend!") # => Hello, 世界 from Bend!
-    IO.print("Hello, World from Bend!") # => Hello, 世界 from Bend!
+    IO.print("Hello, World from Bend!") # => Hello, World from Bend!
 ```
-# =>
-# Hello, 世界 from Bend!
-# Hello, World from Bend!
 
 `do IO<Unit>:` opens an "effect block", which is a sequence of real-world actions. There is no Python equivalent for this annotation.
 
