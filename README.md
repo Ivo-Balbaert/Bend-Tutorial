@@ -1,4 +1,4 @@
-This is a hand-on beginners tutorial for Bend.
+This is a hands-on beginners tutorial for Bend.
 The primary reason for this tutorial is that the official GitHub repo https://github.com/bendlang/bend
 or Bend website (https://bend-lang.com/) don't have any such start-up tutorial. 
 
