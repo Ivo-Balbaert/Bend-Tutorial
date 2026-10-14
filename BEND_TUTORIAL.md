@@ -276,8 +276,7 @@ A String is currently implemented as a linked list of characters. This is not op
 Bend has operators like `+ - * / %` (arithmetic), `&& ||` (booleans), `++` (string
 concatenation, like "Hello, " ++ name), and `< <= > >= ==` (comparisons), and they need spaces around them. 
 Most of them **only work inside a type annotation** like (x + y : U32), which you can read as "compute `x + y` *as* a `U32`".
-This is necessary because `+` and so on. are secretly shorthand for a method call like `U32.add(a, b)`, and Bend needs to know which
-type's `add` to use:
+This is necessary because `+` and so on. are secretly shorthand for a method call like `U32.add(a, b)`, and Bend needs to know which type's `add` to use:
 
 ```py
 (x + y : U32)     # ok: "+" is sugar for U32.add(x, y)
@@ -568,6 +567,9 @@ A couple of extra pattern-matching superpowers worth knowing:
   ```
   Instead call a helper function like `pick(U32.is_eq(n, 0))` in the previous example.
   This restriction exists to support Bend's termination checker (see § [15](#15-laws-and-proofs-code-that-cant-lie)) and its proof system.
+
+As a simple exercise, write a program that prints 1 when a given number is < 10, and 2 if it isn't.
+(Hint: use a Base function of the form: `U32.abc`, see exercises\check_less_than.bend.)
 
 - **Matching numbers directly.** 
 `Nat` values pattern-match as `0n` (zero) or 1n+p` (the successor of `p`, 
