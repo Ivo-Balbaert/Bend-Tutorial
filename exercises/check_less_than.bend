@@ -1,12 +1,12 @@
 import Base
 
-def pick(b: Bool, a: U32, c: U32) -> U32:
-    match b:
+def choose(test: Bool, yes: U32, no: U32) -> U32:
+    match test:
         case True{}:
-            a
+            yes
         case False{}:
-            c
+            no
 
 def main() -> U32:
     x = {7 : U32}
-    pick(U32.is_lt(x, 10), 1, 2)  # => 1
+    choose(U32.is_lt(x, 10), 1, 0)  # => 1

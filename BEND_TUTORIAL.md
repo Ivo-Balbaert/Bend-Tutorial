@@ -51,8 +51,8 @@ As a convention, we use `# =>` to show the output of a code line, like: # => "He
 15. [Laws and Proofs: Code That Can't Lie](#15-laws-and-proofs-code-that-cant-lie)
 16. [The `bend` Command-Line Tool, Cheat Sheet](#16-the-bend-command-line-tool-cheat-sheet)
 17. [Python ↔ Bend Quick-Reference Table](#17-python--bend-quick-reference-table)
-18. [A Bend Cheat sheet](#18-a-bend-cheat-sheet)
-19. [Honest limitations](#19-honest-limitations)
+18. [A Bend Cheat Sheet](#18-a-bend-cheat-sheet)
+19. [Honest Limitations](#19-honest-limitations)
 20. [Where to Go Next](#20-where-to-go-next)
 
 ---
@@ -80,7 +80,7 @@ Bend has a built-in proof system. You can write a "law" such as *"this sorting f
 and Bend's compiler will refuse to compile until you *mathematically prove* it. 
 - **It is an AI-native programming language**
 It is especially aimed at a world where AI assistants write lots of code, piling up bugs and hallucinations, 
-and projects grind to a halt. The result: human code auditing becomes untractable, the so-called AI Doom Loop.
+and projects grind to a halt. The result: human code auditing becomes untractable, the so-called *AI Doom Loop*.
 Bend gives you a way to make sure the AI's code is *actually* correct by formally verifying the implementation, 
 not just that it "looks right". This works for any change of the code, which makes it hack-proof.
 It is the first programming language to work like that.
@@ -466,7 +466,7 @@ def main() -> Array<U32> & U32:
 
 What happens here:
 - `[0 : U32 * 8n]` creates 8 copies of `0`. The slot count is a power of two (test it!). 
-  `[0 : U32^3n]`  states the same thing by depth (2³).
+  `[0 : U32^3n]`  states the same thing by depth (the power of 2: 2³).
 - `a[5] <- 42` writes in place. Because an `Array` is a `Type` (one owner), nobody else can see the old version, so no copy is needed.
 Note that a write (`a[5] <- 42`) hands you back the *same* array so you can keep using it.
 In Python terms, imagine `list.__setitem__` returning the list itself so you must explicitly chain or re-assign it.
@@ -533,8 +533,8 @@ You build a value with (see line 6)
     **`Type`** means "non-copyable" (more on this crucial difference in §  [10](#10-the-big-one-affine-types-and-quantities))
     For ordinary data like shapes, numbers, and enums, use `Data`.
 -  Line #4: `def area(x: Shape) -> U32:` 
-  There are no methods in Bend. You write functions that take the variable instance as an argument, here (x: Shape), 
-  and by convention name them `Type.verb` as in  `Shape.area`.
+  There are no methods in Bend. You write functions that take the variable instance as an argument, 
+  here (x: Shape), like in `area(Square{5})`.
 - Line #5A-B; `match x: case Circle{+r}: ...` **unwraps** the Shape value, 
   binding `r` in the body code of the `case` to the circle's radius field.
   This is similar to Python's structural pattern matching (`match`/`case` syntax added in Python 3.10), 
@@ -869,8 +869,9 @@ def main() -> U32:
 The return type `U32 -> U32` reads as "a function from `U32` to `U32`," 
 same idea as a type hint like `Callable[[int], int]`.
 By calling adder with different `k`-values, you create new functions like add2 and add5, which
-are in fact *closures* (sometimes also called partial applications): they take their argument value 
-to define a specialized add function. For each value of `k` `adder` is called, the binary contains  
+are in fact *closures* (sometimes also called partial applications): they take their argument value for k
+to define a specialized add function (in other words: they capture the value of `k`). 
+For each value of `k` `adder` is called, the binary contains  
 a specialized compiled function.
  
 The catch is this: **a closure is affine — it can be called at most once**, even if everything it 
